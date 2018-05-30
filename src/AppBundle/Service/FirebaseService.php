@@ -3,6 +3,8 @@
 namespace AppBundle\Service;
 
 
+use JMS\DiExtraBundle\Annotation as DI;
+
 /**
  * Class FirebaseService
  * @package AppBundle\Service
@@ -68,7 +70,6 @@ class FirebaseService
 
 		curl_close($curl);
 		$response = json_decode($json_response, true);
-
 		$result = [
 			'status' 	=> $status,
 			'response' 	=> $response
@@ -83,8 +84,9 @@ class FirebaseService
 	 *
 	 * Custom function for firebaseService
 	 */
-	public function sendMessageFromForm(Array $array)
+	public function sendMessageFromForm(Array $array, $serverKey)
 	{
+		$this->server_key = $serverKey;
 		$this->createMessage($array);
 
 		$response = $this->sendMessage();

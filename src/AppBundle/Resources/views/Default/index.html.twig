@@ -18,8 +18,7 @@
 
 	<script src="https://use.fontawesome.com/2ef3db8df1.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
@@ -72,17 +71,54 @@
 
 				</ul>
 			</div>
+
+			<div class="col-lg-12 text-center">
+				<form class="firebaseForm">
+					<div class="form-group">
+						<label for="serverKey">Server Key Firebase</label>
+						<input type="text" class="form-control serverKey" id="serverKey" aria-describedby="emailHelp" placeholder="Server Key Firebase ">
+						<small  class="form-text text-muted">Clé version Legacy</small>
+					</div>
+					<div class="form-group">
+						<label for="tokenFirebase">Token Firebase</label>
+						<input type="text" class="form-control tokenFirebase" id="tokenFirebase" placeholder="Token Firebase">
+					</div>
+					<div class="form-group">
+						<label for="title">Titre de la notification</label>
+						<input type="text" class="form-control title" id="title" placeholder="Titre de la notification">
+					</div>
+					<div class="form-group">
+						<label for="body">Contenu de la notification</label>
+
+						<textarea  class="form-control body" id="body" placeholder="Contenu de la notification"></textarea>
+					</div>
+					<button type="submit" class="btn btn-primary">Envoyer</button>
+				</form>
+			</div>
 		</div>
+
 	</div>
 
-	<form>
-		<input >
-
-	</form>
 
 {% endblock %}
 {% block javascripts %}
+	<script>
+		$('.firebaseForm').on('submit', function (e) {
+			e.preventDefault();
 
+			$.ajax({
+				url: '{{ url('app_default_sendnotificationfirebase') }}',
+				data: {
+					serverKey: 	$('.serverKey').val(),
+					tokenFirebase: $('.tokenFirebase').val(),
+					title: 		$('.title').val(),
+					body: 		$('.body').val(),
+					badge:		1
+				}
+			});
+
+		});
+	</script>
 {% endblock %}
 </body>
 </html>
