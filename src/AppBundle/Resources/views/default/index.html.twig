@@ -92,6 +92,20 @@
 
 						<textarea  class="form-control body" id="body" placeholder="Contenu de la notification"></textarea>
 					</div>
+					<div class="form-group">
+						<label for="data-key">
+							Clé Data
+						</label>
+						<input class="form-control data-key" id="data-key" placeholder="Clé data" type="text" >
+
+					</div>
+					<div class="form-group">
+						<label for="data-content">
+							Contenu Data
+						</label>
+						<input class="form-control data-content" id="data-content" placeholder="Content data" type="text" >
+
+					</div>
 					<button type="submit" class="btn btn-primary">Envoyer</button>
 				</form>
 			</div>
@@ -113,7 +127,9 @@
 					tokenFirebase: $('.tokenFirebase').val(),
 					title: 		$('.title').val(),
 					body: 		$('.body').val(),
-					badge:		1
+					badge:		1,
+					dataKey:	$('.data-key').val(),
+					dataContent: $('.data-content').val()
 				}
 			});
 

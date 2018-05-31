@@ -35,7 +35,8 @@ class DefaultController extends Controller
 			'to'		=> $request->get('tokenFirebase'),
 			'title'		=> $request->get('title'),
 			'body'		=> $request->get('body'),
-			'badge'		=> $request->get('badge')
+			'badge'		=> $request->get('badge'),
+			'data'		=> [ $request->get('dataKey') => $request->get('dataContent')]
 		], $request->get('serverKey'));
 
 		return new JsonResponse($response, JsonResponse::HTTP_ACCEPTED);
