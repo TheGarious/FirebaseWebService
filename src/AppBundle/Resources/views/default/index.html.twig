@@ -22,7 +22,10 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
+	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/tooltipster.min.css">
 
@@ -31,6 +34,14 @@
 		body {
 			font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 		}
+		
+		.error-div {
+			border: solid 3px red;
+			background: yellow;
+			margin: 20px 0;
+			display: none;
+		}
+		
 	</style>
 
 
@@ -66,22 +77,25 @@
 			<div class="col-lg-12 text-center">
 				<h1 class="mt-5">FireBase WebService</h1>
 				<p class="lead">Utilitaire pour tester firebase</p>
-				<ul style="font-size: 24px" class="list-unstyled">
+				<!--<ul style="font-size: 24px" class="list-unstyled">
 					<li>Symfony 2/3</li>
 
-				</ul>
+				</ul>-->
 			</div>
-
+			<div class="error-div col-lg-12 text-center">
+				<label>Description de l'erreur :</label>
+				<p class="error-content"></p>
+			</div>
 			<div class="col-lg-12 text-center">
 				<form class="firebaseForm">
 					<div class="form-group">
 						<label for="serverKey">Server Key Firebase</label>
-						<input type="text" class="form-control serverKey" id="serverKey" aria-describedby="emailHelp" placeholder="Server Key Firebase ">
+						<input required type="text" class="form-control serverKey" id="serverKey" aria-describedby="emailHelp" placeholder="Server Key Firebase ">
 						<small  class="form-text text-muted">Clé version Legacy</small>
 					</div>
 					<div class="form-group">
 						<label for="tokenFirebase">Token Firebase</label>
-						<input type="text" class="form-control tokenFirebase" id="tokenFirebase" placeholder="Token Firebase">
+						<input required type="text" class="form-control tokenFirebase" id="tokenFirebase" placeholder="Token Firebase">
 					</div>
 					<div class="form-group">
 						<label for="title">Titre de la notification</label>
@@ -119,6 +133,8 @@
 	<script>
 		$('.firebaseForm').on('submit', function (e) {
 			e.preventDefault();
+			$('.error-div').css('display', 'none');
+			$('.error-content').text("");
 
 			$.ajax({
 				url: '{{ url('app_default_sendnotificationfirebase') }}',
@@ -131,7 +147,34 @@
 					dataKey:	$('.data-key').val(),
 					dataContent: $('.data-content').val()
 				}
-			});
+			})
+			.done(function (response) {
+					console.log(response);
+					if (response.status == 401)
+					{
+						toastr.error("Erreur veuillez verifier les informations", "Notification");
+
+					}
+					else
+					{
+
+						if (response.response !== null)
+						{
+							if (response.response.success > 0)
+							{
+								toastr.success("Notification a bien été envoyé");
+							}
+							if (response.response.failure > 0)
+							{
+								toastr.warning("Des erreurs sont survenus");
+								$('.error-div').css('display', 'unset');
+								$('.error-content').text(response.response.results[0].error);
+							}
+
+						}
+					}
+				})
+			;
 
 		});
 	</script>
