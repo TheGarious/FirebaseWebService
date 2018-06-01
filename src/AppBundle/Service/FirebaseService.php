@@ -40,6 +40,9 @@ class FirebaseService
 		if (array_key_exists("sound", $message)) {
 			$this->message["notification"]["sound"] = $message["sound"];
 		}
+		if (array_key_exists("data", $message)) {
+			$this->message["data"] = $message["data"];
+		}
 
 		$this->message["content_available"] = true;
 
