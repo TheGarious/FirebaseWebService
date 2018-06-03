@@ -24,6 +24,16 @@
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119694388-2"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119694388-2');
+	</script>
+
 
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -83,8 +93,9 @@
 				</ul>-->
 			</div>
 			<div class="error-div col-lg-12 text-center">
-				<label>Description de l'erreur :</label>
-				<p class="error-content"></p>
+				<label>Indice de l'erreur :</label>
+				<a href="https://firebase.google.com/docs/cloud-messaging/http-server-ref#table9" target="_blank"> <p class="error-content"></p></a>
+				<p>Pour plus d'informations sur l'erreur cliquez dessus</p>
 			</div>
 			<div class="col-lg-12 text-center">
 				<form class="firebaseForm">
@@ -120,7 +131,7 @@
 						<input class="form-control data-content" id="data-content" placeholder="Content data" type="text" >
 
 					</div>
-					<button type="submit" class="btn btn-primary">Envoyer</button>
+					<button type="submit" class="btn btn-primary send-notif">Envoyer</button>
 				</form>
 			</div>
 		</div>
@@ -135,6 +146,7 @@
 			e.preventDefault();
 			$('.error-div').css('display', 'none');
 			$('.error-content').text("");
+			$('.send-notif').prop("disabled",true);
 
 			$.ajax({
 				url: '{{ url('app_default_sendnotificationfirebase') }}',
@@ -150,10 +162,14 @@
 			})
 			.done(function (response) {
 					console.log(response);
+					if (response.status == 0)
+					{
+						toastr.error("Erreur veuillez vérifier votre connexion internet", "Notification");
+
+					}
 					if (response.status == 401)
 					{
-						toastr.error("Erreur veuillez verifier les informations", "Notification");
-
+						toastr.error("Erreur veuillez vérifier les informations", "Notification");
 					}
 					else
 					{
@@ -173,6 +189,7 @@
 
 						}
 					}
+					$('.send-notif').prop("disabled",false);
 				})
 			;
 
